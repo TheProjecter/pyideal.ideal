@@ -1,0 +1,46 @@
+Estructura:
+1) Los plugins tienen que tener como minimo 2 archivos y uno opcional.
+Los archivos son:
+Models.py = Modelo de db para insertar info
+en la app_config o en la config del plugin (ej en proyect_management
+por ahora solo hay datos del archivo de proyecto que se genera).
+setup.py = Contiene la clase que verifica la correcta instalacion
+del plugin
+Opcional:
+test.py = (Parte de la buena practica :P)Contiene test para el plugin usando unittest.
+
+2)Core:
+Contiene varios archivos:
+kernel.py = contiene el core en si mismo.
+the_ev3nt_management.py = Definicion de Event manager y Event.
+event_utils.py = DEPRECATED! :D
+test.py = unittest(ing)
+settings.py = Algunas opciones off-the-record del sistema.
+Configuration = Contiene:
+	models.py = modelo de db que se usa para guardar la config. de la app.
+	conf.py = Contiene la clase AppConfig que contiene toda la configuracion
+	de la app.
+	
+3) CoreUI:
+Contiene vestigios de un tiempo pasado, donde las ilusiones eran grandes...
+Luego enfrentamos la realidad y bueno... :'(
+Igualmente la idea seria que desde CoreUI se inicialice lo minimo indispensable
+para la visualizacion del IDE.
+
+4)Startupconfig:
+Mas trazas de cosas antiguas... DEPRECATED!
+
+TODOs:
+1) Metodo de instalacion de plugins: se puede ver algo de como 
+se inicializaria en proyect_management/setup.py.
+La idea seria que el core/pluginmanager se encarge de levantar
+esa clase y con la funcion start_me_up se verifica si esta todo
+ok para la inicializacion real del modulo.
+2) Plugin manager: probe la posibilidad de usar yapsy para la 
+gestion de plugins, pero me parece que no va, es medio primitivo.
+El PlugM deberia poder instalar plugins desde la carpeta de plugins,
+desde archivos zip (y eggs?), y maybe tener la opcion de poder descargarlos
+de internet directamente (ala firefox).
+3) ProyectManagement: Probar en mayor detalle, finalizar el unittesting en test.py
+
+

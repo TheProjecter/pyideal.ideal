@@ -1,6 +1,6 @@
 import startupconfig
 
-from the_ev3nt_management import Ev3ntManager as EventManager
+from kernel import kernel as core
 
 def LiftMeUp():
     pass

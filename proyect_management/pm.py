@@ -10,8 +10,7 @@ from platform import system
 from sqlobject import *
 from models import *
 from utils import *
-from core.event_utils import *
-from the_ev3nt_management import Ev3nt
+from core import core
 
 OUR_PRY_EXT = "ideal"
 PMVERSION = "0.3"
@@ -24,22 +23,35 @@ class openedFile(object):
     __prj = None
     __contens = None
     __dirty = False
+    __plugin_conf = None
+    __events=None
     
     #For events status:
     __current_op = CURRENT_FILE_OP.IDLE
     
-    pre_save = None
-    post_save = None
+    def pre_save(self, *args, **kwargs):
+        return core.fire_event(self.__plugin_conf.get_hash("pre_save"), *args, **kwargs )
     
-    pre_open = None
-    post_open = None
+    def post_save(self, *args, **kwargs):
+        return core.fire_event(self.__plugin_conf.get_hash("post_save"), *args, **kwargs)
     
-    pre_read = None
-    post_read = None
+    def pre_open(self, *args, **kwargs):
+        return core.fire_event(self.__plugin_conf.get_hash("pre_open"), *args, **kwargs )
+    
+    def post_open(self, *args, **kwargs):
+        return core.fire_event(self.__plugin_conf.get_hash("pre_open"), *args, **kwargs )
+    
+    def pre_read(self, *args, **kwargs):
+        return core.fire_event(self.__plugin_conf.get_hash("pre_read"), *args, **kwargs )
+    
+    def post_read(self, *args, **kwargs):
+        return core.fire_event(self.__plugin_conf.get_hash("pre_read"), *args, **kwargs )
+    
     
     def __init__(self, filedb, prj):
         self.__fdb = filedb
         self.__prj = prj
+        self.__plugin_conf=core.get_plugin_config(PLUGIN_NAME)
         self.open()
     
     @property
@@ -72,25 +84,19 @@ class openedFile(object):
     def open(self):
         if self.__current_op == CURRENT_FILE_OP.IDLE:
             self.__current_op = CURRENT_FILE_OP.OPENING
-        pre_open_result = check_and_fire_event(self.pre_open, self)
-        if not pre_open_result == EVENT_CALLED:
-            if not pre_open_result:
-                return False
+        self.pre_open()
         f = open(self.full_filename, "r")       
         self.__contens = f.read()
         f.close()
         self.__fdb.displayed = 1
-        check_and_fire_event(self.post_open, self)
+        self.post_open()
         if self.__current_op == CURRENT_FILE_OP.OPENING:
             self.__current_op = CURRENT_FILE_OP.IDLE
 
     def read(self, start_at=None, to=None, skipCache=False):
         if self.__current_op == CURRENT_FILE_OP.IDLE:
             self.__current_op = CURRENT_FILE_OP.READING
-        pre_read_result = check_and_fire_event(self.pre_read, self, start_at, to, skipCache)
-        if not pre_read_result == EVENT_CALLED:
-            if not pre_read_result:
-                return False
+        self.pre_read()
         if skipCache:            
             f = open(self.full_filename, "r")
             self.contens(f.read())
@@ -102,7 +108,7 @@ class openedFile(object):
             r_to = to
         if start_at < 0 or start_at > r_to:
             start_at = 0 
-        check_and_fire_event(self.post_read, self, start_at, to, skipCache)
+        self.post_read()
         if self.__current_op == CURRENT_FILE_OP.READING:
                 self.__current_op = CURRENT_FILE_OP.IDLE   
         return self.contens()[start_at:to]
@@ -116,10 +122,7 @@ class openedFile(object):
             self.__contens = contens
         if self.__current_op == CURRENT_FILE_OP.IDLE:
             self.__current_op = CURRENT_FILE_OP.SAVING
-        pre_save_result = check_and_fire_event(self.pre_save, self)
-        if not pre_save_result in [EVENT_CALLED, EVENT_NOT_CALLABLE, EVENT_NOT_SET]:
-            if not pre_save_result:
-                return False
+        self.pre_save()
         the_file = self.full_filename 
         if failIfMissing:
             if os.path.isfile(the_file):
@@ -133,7 +136,7 @@ class openedFile(object):
         tf.close()
         self.__fdb.troughTo.metadata.hash = hash_data(self.__contens)
         self.__dirty = False
-        check_and_fire_event(self.post_save, self)
+        self.post_save()
         if self.__current_op == CURRENT_FILE_OP.SAVING:
             self.__current_op = CURRENT_FILE_OP.IDLE
         return True

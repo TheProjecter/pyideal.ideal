@@ -1,40 +1,14 @@
 from exceptions import NotImplementedError
+from UI import MainWindow
 
 
+class coreUI(object):
+	__window_app=MainWindow()
+	
+	@classmethod
+	def add_plugin_ui (cls, widget):
+		cls.__window_app.the_real_add_plugin_ui(widget)
 
-class Panel(object):
-    name = ""
-    contains = list()
-    def __init__(self, name):
-        self.name = name
-    
-    def addWidget(self, widget):
-        self.contains.append(widget)
-    
-    def draw(self, container=None):
-        raise NotImplementedError("Debe Especializarse el Panel")
-
-
-class Input(object):
-    name = ""
-    text = ""
-    def __init__(self, name, label, text, widget):
-        self.name = name
-        self.label = label
-        self.text = text
-        self.widget = widget
-    
-    def draw(self, container=None):
-        raise NotImplementedError("Debe Especializarse el TextInput")
-
-
-class ButtonInput(object):
-    name = ""
-    label = ""
-    onClick = None
-    def __init__(self, name, label):
-        self.name = name
-        self.label = label
-    
-    def draw(self, container=None):
-        raise NotImplementedError("Debe Especializarse el ButtonInput")
+	@classmethod
+	def set_mainwindow(cls, mainwin):
+		cls.__window_app = mainwin

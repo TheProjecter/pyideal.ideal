@@ -32,7 +32,14 @@ class AppConfig(object):
         self.__paths.setConnection(appdb)
     
     #Generar metodos para interactuar con las opciones de configuracion...
+    def get_path(self, name):
+        result=self.__paths.select(""" name=="{0}" """.format(name))
+        if result.count():
+            return result.getOne()["path"]
     
+    def get_plugin_list(self):
+        return dict()
+        
     
     
     

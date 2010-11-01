@@ -16,6 +16,7 @@ from sqlobject import SQLObject, StringCol, ForeignKey, BoolCol
 
 class Paths(SQLObject):
     path = StringCol()
+    name = StringCol()
     description = StringCol()
 
 

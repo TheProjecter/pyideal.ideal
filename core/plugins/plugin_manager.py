@@ -26,22 +26,57 @@ class PluginManager(object):
     def reconfigure(self, app_config): 
         self.__app_config = app_config
     
-    def install_plugin(self, plugin_file_or_dir, activate=False):
+    def install_plugin(self, plugin_file_or_dir, enable=False):
+        '''
+            Installs the plugin, needs a zip file, or a directory.
+            Enable if the plugins installs ok.
+        '''
+        #TODO: mover todo a la ruta que corresponda
+        pass
+    
+    def uninstall_plugin(self, plugin_name, enable=False):
+        '''
+            Uninstalls the plugin. Kill all the files! :P
+        '''
         #TODO: mover todo a la ruta que corresponda
         pass
     
     def activate_plugin(self, plugin_name):
-        #TODO: validar el path e instalar ocn pugin_name
-        if not (plugin_name in self.__plugin_list.key()):
-            raise ValueError("""No Existe el plugin!, Falta instalarlo?""")
-        
+        '''
+            Activate (load) the plugin
+        '''
+        #TODO: Things...
+        self.__register_plugin_events(plugin_name)
+        #TODO: More Things...
+    
+    def deactivate_plugin(self, plugin_name):
+        '''
+            Deactivate (unload) the plugin
+        '''
+        #TODO: Things...
+        self.__unregister_plugin_events(plugin_name)
+        #TODO: More Things...
+    
     def __check_plugins(self):
+        '''
+            Check the plugins instalation. Only on app start.
+        '''
         pass
     
     def __register_plugin_events(self, plugin_name):
+        '''
+            Register the plugins events on core!.
+        '''
         #TODO: Registrar eventos del plugin determinado.
         #asd=__import__(plugin_name, fromlist=['', ''])
-        mod = self.__plugin_list[plugin_name]
+        plugin = self.__plugin_list[plugin_name]
+        __import__(plugin)
         
-    
+    def __unregister_plugin_events(self, plugin_name):
+        '''
+            Register the plugins events on core!.
+        '''
+        #TODO: Desregistrar eventos del plugin determinado.
+        #asd=__import__(plugin_name, fromlist=['', ''])
+        mod = self.__plugin_list[plugin_name]
 

@@ -5,30 +5,43 @@ Created on Oct 16, 2010
 '''
 
 from core.the_ev3nt_management import Ev3ntManager as EventManager
+from core.plugins.plugin_manager import PluginManager
 
 class kernel(object):
-    __event_manager=None
-    __plugin_config=None
+    __event_manager = EventManager()
+    __plugins_manager = PluginManager()
+    __plugins_configs = dict()    
     
     def __init__(self):
-        self.__event_manager = EventManager()
-        self.__plugin_config = dict()
+        raise NotImplementedError("No, no, i'm a 'static' class")
     
-    
-    def new_event(self, plugin, event_name, event_permission_cb=None):
+    @classmethod
+    def new_event(cls, plugin, event_name, event_permission_cb=None):
         evt='->'.join([plugin,event_name])
-        return self.__event_manager.new_event(evt, event_permission_cb)
+        return cls.__event_manager.new_event(evt, event_permission_cb)
     
-    def register_to_event(self, plugin, event_name, event_handler):
+    @classmethod
+    def register_to_event(cls, plugin, event_name, event_handler):
         evt='->'.join([plugin,event_name])
-        return self.__event_manager.register_to_event(evt, event_handler)
+        return cls.__event_manager.register_to_event(evt, event_handler)
     
-    def fire_event(self, event_hash, *args, **kwargs):
-        return self.__event_manager.fire_event(event_hash, *args, **kwargs)
+    @classmethod
+    def fire_event(cls, event_hash, *args, **kwargs):
+        return cls.__event_manager.fire_event(event_hash, *args, **kwargs)
     
-    def get_event_control(self, plugin, event_name, event_token):
+    @classmethod
+    def get_event_control(cls, plugin, event_name, event_token):
         evt='->'.join([plugin,event_name])
-        return self.__event_manager.get_event_hash(evt, event_token)
+        return cls.__event_manager.get_event_hash(evt, event_token)
 
-    def get_plugin_config(self, plugin_name):
-        return self.__plugin_config[plugin_name]
+    @classmethod
+    def get_plugin_config(cls, plugin_name):
+        return cls.__plugins_configs[plugin_name]
+    
+    @classmethod
+    def activate_plugin(cls, plugin_name):
+        return cls.__plugins_manager.activate_plugin(plugin_name)
+    
+    @classmethod
+    def deactivate_plugin(cls, plugin_name):
+        return cls.__plugins_manager.deactivate_plugin(plugin_name)

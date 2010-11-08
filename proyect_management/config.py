@@ -3,45 +3,60 @@ Created on Oct 5, 2010
 
 @author: EB020653
 '''
-#from exceptions import IOError
-#import config
 from core import core
 
 PLUGIN_NAME="proyect_management"
+EVENTS_NAMES= ["pre_save", "post_save", "pre_open", "post_open",\
+               "pre_read","post_read"]
 
 class ConfigPlugin(object):
+    """
+        Contains specific plugin configuration.
+    """
     __event_hash = None
+    __app_config = None
     
-    def __init__(self):
-        self.__event_hash = dict()
-    
-    def add_event(self, d):
-        self.__event_hash.update(d)
+    def __init__(self, app_cfg, events_dict):
+        self.__event_hash = events_dict
+        self.__app_config = app_cfg
     
     def get_hash(self, name):
+        """
+            Devuelve el hash de un event para poder dispararlo
+        """
         return self.__event_hash[name]
     
     
 #class opened
 class SetupPlugin(object):
-    '''
-    classdocs
-    '''
+    """
+        Setup the Initial Plugin config and check deps for it.
+    """
     __app_cfg = None
-    __plugin_cfg = None
+    __plugin_config = None
+    __events_names = None
+    __callbacks = None
     __event_hash = None
     __core = None
 
     def __init__(self, app_config):
-        '''
+        """
         Constructor
-        '''
+        """
         self.__app_cfg=app_config
-        self.__plugin_cfg = ConfigPlugin()
-        self.__event_hash=dict()
+        """
+            Creating Events
+        """
+        event_hash=dict()
+        for event in EVENTS_NAMES:
+            event_hash.update({event:core.new_event(self, PLUGIN_NAME, event)})
+        self.__plugins_configs = ConfigPlugin(app_config, event_hash)
         
     
     def check_config_data(self):
+        """
+            Validate if the needed config exists.
+        """
         pass   
     
     def reconfigure(self, app_config):
@@ -60,25 +75,24 @@ class SetupPlugin(object):
         """
         try:
             from proyect_management import ProyectManager
-            pmtest = ProyectManager(self.__app_config)
+            pmtest = ProyectManager(self.__plugins_configs)
             pmtest = None
         except:
             return False
         return True #ProyectManager(self._cfg)
     
-    def register_events(self):
-        self.__plugin_cfg.add_event({"pre_save":core.new_event(self, PLUGIN_NAME, "pre_save")})
-        self.__plugin_cfg.add_event({"post_save":core.new_event(self, PLUGIN_NAME, "post_save")})
-        self.__plugin_cfg.add_event({"pre_open":core.new_event(self, PLUGIN_NAME, "pre_open")})
-        self.__plugin_cfg.add_event({"post_open":core.new_event(self, PLUGIN_NAME, "post_open")})
-        self.__plugin_cfg.add_event({"pre_read":core.new_event(self, PLUGIN_NAME, "pre_read")})
-        self.__plugin_cfg.add_event({"post_read":core.new_event(self, PLUGIN_NAME, "post_read")})
-        
     def get_config(self):
-        return self.__plugin_cfg
+        """
+            Return the module config.
+        """
+        return self.__plugin_config
+    
+    def get_events(self):
+        '''
+            Returns a dictionary with event_name:auth_fire_callback_func
+            auth_fire_callback_func can be None
+        '''
+        self.__events_names=('openedFile->pre_save', 'openedFile->post_save', )
+        self.__callbacks=(None,)
         
-    def list_events(self):
-        return {"pre_save":None, "post_save":None}
-
-
-
+        return dict(map(None, events_names, callbacks))

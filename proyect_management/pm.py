@@ -11,6 +11,7 @@ from sqlobject import *
 from models import *
 from utils import *
 from core import core
+from config import PLUGIN_NAME
 
 OUR_PRY_EXT = "ideal"
 PMVERSION = "0.3"
@@ -30,22 +31,22 @@ class openedFile(object):
     __current_op = CURRENT_FILE_OP.IDLE
     
     def pre_save(self, *args, **kwargs):
-        return core.fire_event(self.__plugin_conf.get_hash("pre_save"), *args, **kwargs )
+        return core.fire_event(self.__plugin_conf.get_hash(self.__class__.__name__+"->pre_save"), *args, **kwargs )
     
     def post_save(self, *args, **kwargs):
-        return core.fire_event(self.__plugin_conf.get_hash("post_save"), *args, **kwargs)
+        return core.fire_event(self.__plugin_conf.get_hash(self.__class__.__name__+"->post_save"), *args, **kwargs)
     
     def pre_open(self, *args, **kwargs):
-        return core.fire_event(self.__plugin_conf.get_hash("pre_open"), *args, **kwargs )
+        return core.fire_event(self.__plugin_conf.get_hash(self.__class__.__name__+"->pre_open"), *args, **kwargs )
     
     def post_open(self, *args, **kwargs):
-        return core.fire_event(self.__plugin_conf.get_hash("pre_open"), *args, **kwargs )
+        return core.fire_event(self.__plugin_conf.get_hash(self.__class__.__name__+"->post_open"), *args, **kwargs )
     
     def pre_read(self, *args, **kwargs):
-        return core.fire_event(self.__plugin_conf.get_hash("pre_read"), *args, **kwargs )
+        return core.fire_event(self.__plugin_conf.get_hash(self.__class__.__name__+"->pre_read"), *args, **kwargs )
     
     def post_read(self, *args, **kwargs):
-        return core.fire_event(self.__plugin_conf.get_hash("pre_read"), *args, **kwargs )
+        return core.fire_event(self.__plugin_conf.get_hash(self.__class__.__name__+"->post_read"), *args, **kwargs )
     
     
     def __init__(self, filedb, prj):

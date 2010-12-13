@@ -3,7 +3,7 @@ from UI import MainWindow
 
 
 class coreUI(object):
-	__window_app=MainWindow()
+	__window_app = MainWindow()
 	
 	@classmethod
 	def add_plugin_ui (cls, widget):
@@ -11,4 +11,4 @@ class coreUI(object):
 
 	@classmethod
 	def set_mainwindow(cls, mainwin):
-		cls.__window_app = mainwin
+		cls.__window_app = mainw

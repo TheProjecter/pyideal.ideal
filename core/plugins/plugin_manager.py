@@ -18,9 +18,11 @@ class PluginManager(object):
     __plugin_path=None
     
     def __init__(self, app_config):
-        self.__app_config = app_config
-        self.__plugin_list = app_config.get_plugin_list()
-        self.__plugin_path = app_config.get_path("plugin_path")
+        # TODO: Ver como manejar la configuracion global de la APP
+        #self.__app_config = app_config
+        #self.__plugin_list = app_config.get_plugin_list()
+        #self.__plugin_path = app_config.get_path("plugin_path")
+        pass
     
     # here?
     def reconfigure(self, app_config): 

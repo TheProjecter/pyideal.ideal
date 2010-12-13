@@ -9,11 +9,11 @@ import types
 import logging
 
 
-class Event_stop_processing():
+class Event_Stop_Processing():
     def __init__(self):
         raise NotImplementedError("NEVER try to instance me!")
 
-EVENT_STOP_PROCESSING = Event_stop_processing
+EVENT_STOP_PROCESSING = Event_Stop_Processing
 
 class Ev3ntManager(object):
     __events_funcs = None
@@ -40,10 +40,15 @@ class Ev3ntManager(object):
             raise ValueError("""You need to specify a name for the event!""")
         self.__events_funcs[self.__events_id[event_name]] += event_handler
     
+    def unregister_to_event(self, event_name, event_handler):
+        if event_name=="":
+            raise ValueError("""You need to specify a name for the event!""")
+        self.__events_funcs[self.__events_id[event_name]] -= event_handler
+    
     def fire_event(self, event_hash, *args, **kwargs):
         if event_hash=="":
             raise ValueError("""You need to specify a name for the event!""")
-        self.__events_funcs[self.__events_id[event_hash]](args, kwargs)
+        self.__events_funcs[event_hash](args, kwargs)
 
     def get_event_hash (self, event_name, event_token):
         if event_name=="":

@@ -9,7 +9,7 @@ from core.plugins.plugin_manager import PluginManager
 
 class kernel(object):
     __event_manager = EventManager()
-    __plugins_manager = PluginManager()
+    __plugins_manager = PluginManager(None)
     __plugins_configs = dict()    
     
     def __init__(self):
@@ -24,6 +24,11 @@ class kernel(object):
     def register_to_event(cls, plugin, event_name, event_handler):
         evt='->'.join([plugin,event_name])
         return cls.__event_manager.register_to_event(evt, event_handler)
+    
+    @classmethod
+    def unregister_to_event(cls, plugin, event_name, event_handler):
+        evt='->'.join([plugin,event_name])
+        return cls.__event_manager.unregister_to_event(evt, event_handler)
     
     @classmethod
     def fire_event(cls, event_hash, *args, **kwargs):

@@ -3,7 +3,7 @@ Created on Oct 6, 2010
 
 @author: EB020653
 '''
-from sqlobject import *
+from sqlobject import SQLObject, StringCol, BoolCol, ForeignKey
 
 class FileMetaData(SQLObject):
     mimetype = StringCol()

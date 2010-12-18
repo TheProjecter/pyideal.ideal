@@ -10,4 +10,6 @@ class Path(SQLObject):
     name = StringCol()
     path = StringCol()
 
-class 
+class PluginList(SQLObject):
+    name = StringCol()
+    isactive = BoolCol(default=False)

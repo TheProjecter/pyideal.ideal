@@ -10,7 +10,7 @@ from platform import system
 from sqlobject import *
 from models import *
 from utils import *
-from core import core
+from core import Core
 from config import PLUGIN_NAME
 
 OUR_PRY_EXT = "ideal"
@@ -25,34 +25,34 @@ class openedFile(object):
     __contens = None
     __dirty = False
     __plugin_conf = None
-    __events=None
+    __events = None
     
     #For events status:
     __current_op = CURRENT_FILE_OP.IDLE
     
     def pre_save(self, *args, **kwargs):
-        return core.fire_event(self.__plugin_conf.get_hash(self.__class__.__name__+"->pre_save"), *args, **kwargs )
+        return Core.fire_event(self.__plugin_conf.get_hash(self.__class__.__name__ + "->pre_save"), *args, **kwargs)
     
     def post_save(self, *args, **kwargs):
-        return core.fire_event(self.__plugin_conf.get_hash(self.__class__.__name__+"->post_save"), *args, **kwargs)
+        return Core.fire_event(self.__plugin_conf.get_hash(self.__class__.__name__ + "->post_save"), *args, **kwargs)
     
     def pre_open(self, *args, **kwargs):
-        return core.fire_event(self.__plugin_conf.get_hash(self.__class__.__name__+"->pre_open"), *args, **kwargs )
+        return Core.fire_event(self.__plugin_conf.get_hash(self.__class__.__name__ + "->pre_open"), *args, **kwargs)
     
     def post_open(self, *args, **kwargs):
-        return core.fire_event(self.__plugin_conf.get_hash(self.__class__.__name__+"->post_open"), *args, **kwargs )
+        return Core.fire_event(self.__plugin_conf.get_hash(self.__class__.__name__ + "->post_open"), *args, **kwargs)
     
     def pre_read(self, *args, **kwargs):
-        return core.fire_event(self.__plugin_conf.get_hash(self.__class__.__name__+"->pre_read"), *args, **kwargs )
+        return Core.fire_event(self.__plugin_conf.get_hash(self.__class__.__name__ + "->pre_read"), *args, **kwargs)
     
     def post_read(self, *args, **kwargs):
-        return core.fire_event(self.__plugin_conf.get_hash(self.__class__.__name__+"->post_read"), *args, **kwargs )
+        return Core.fire_event(self.__plugin_conf.get_hash(self.__class__.__name__ + "->post_read"), *args, **kwargs)
     
     
     def __init__(self, filedb, prj):
         self.__fdb = filedb
         self.__prj = prj
-        self.__plugin_conf=core.get_plugin_config(PLUGIN_NAME)
+        self.__plugin_conf = Core.get_plugin_config(PLUGIN_NAME)
         self.open()
     
     @property
@@ -201,7 +201,7 @@ class Proyect(object):
         assert file != ""
         assert the_path != ""
         common_path = path.commonprefix([self.get_base_path(), the_path])
-        full_relative_path=the_path.replace(common_path, "")
+        full_relative_path = the_path.replace(common_path, "")
         (start_path, relative_path) = os.path.split(full_relative_path)
         return FileData(name=file, relative_path=self.__dirs.selectBy("""name={0}""".format(relative_path)), metadata=None) 
     

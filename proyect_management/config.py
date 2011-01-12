@@ -3,11 +3,9 @@ Created on Oct 5, 2010
 
 @author: EB020653
 '''
-from core import core
 
-PLUGIN_NAME="proyect_management"
-EVENTS_NAMES= ["pre_save", "post_save", "pre_open", "post_open",\
-               "pre_read","post_read"]
+PLUGIN_NAME = "proyect_management"
+
 
 class ConfigPlugin(object):
     """
@@ -16,7 +14,7 @@ class ConfigPlugin(object):
     __event_hash = None
     __app_config = None
     
-    def __init__(self, app_cfg, events_dict):
+    def __init__(self, events_dict):
         self.__event_hash = events_dict
         self.__app_config = app_cfg
     
@@ -34,24 +32,26 @@ class SetupPlugin(object):
     """
     __app_cfg = None
     __plugin_config = None
-    __events_names = None
+    #__events_names = None
     __callbacks = None
     __event_hash = None
     __core = None
+    
+    __EVENTS_NAMES = [ #Event Name : Auth_Cb
+                      {"openedFile->pre_save" : None}, 
+                      {"openedFile->post_save" : None}, 
+                      {"openedFile->pre_open" : None}, 
+                      {"openedFile->post_open" : None}, 
+                      {"openedFile->pre_read" : None}, 
+                      {"openedFile->post_read" : None},
+                      ]
 
-    def __init__(self, app_config):
+    def __init__(self):
         """
         Constructor
         """
-        self.__app_cfg=app_config
-        """
-            Creating Events
-        """
-        event_hash=dict()
-        for event in EVENTS_NAMES:
-            event_hash.update({event:core.new_event(self, PLUGIN_NAME, event)})
         self.__plugins_configs = ConfigPlugin(app_config, event_hash)
-        
+        pass
     
     def check_config_data(self):
         """
@@ -81,18 +81,13 @@ class SetupPlugin(object):
             return False
         return True #ProyectManager(self._cfg)
     
-    def get_config(self):
+    def get_config(self, event_hash):
         """
             Return the module config.
         """
+        if self.__plugin_config is None:
+            self.__plugin_config=ConfigPlugin(self.__app_cfg, event_hash)
         return self.__plugin_config
     
     def get_events(self):
-        '''
-            Returns a dictionary with event_name:auth_fire_callback_func
-            auth_fire_callback_func can be None
-        '''
-        self.__events_names=('openedFile->pre_save', 'openedFile->post_save', )
-        self.__callbacks=(None,)
-        
-        return dict(map(None, events_names, callbacks))
+        return self.__EVENTS_NAMES

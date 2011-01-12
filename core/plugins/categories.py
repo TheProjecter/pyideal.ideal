@@ -10,7 +10,7 @@ class Generic(IPlugin):
     '''
     classdocs
     '''
-    name="Generic Plugin"
+    name = "Generic Plugin"
 
     def __init__(self):
         '''
@@ -23,7 +23,7 @@ class TextManipulation(IPlugin):
     '''
     classdocs
     '''
-    name="Text Manipulation"
+    name = "Text Manipulation"
 
     def __init__(self):
         '''
@@ -36,7 +36,7 @@ class FileManipulation(IPlugin):
     '''
     classdocs
     '''
-    name="File Manipulation"
+    name = "File Manipulation"
 
     def __init__(self):
         '''

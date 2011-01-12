@@ -1,1 +1,2 @@
-from kernel import kernel as core
+from kernel import Core
+

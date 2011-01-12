@@ -7,7 +7,7 @@ from core import core
 from time import sleep
 import sys
 
-APPEXIT_REQUEST_EVENT_HASH=""
+APPEXIT_REQUEST_EVENT_HASH = ""
 
 
 def request_to_exit(*args, **kwargs):
@@ -21,12 +21,12 @@ def request_to_exit(*args, **kwargs):
     
 
 if __name__ == "__main__":
-    APPEXIT_REQUEST_EVENT_HASH=core.new_event("main", "exit")
-    core.register_to_event("main",  "exit", request_to_exit) 
-    t=0
+    APPEXIT_REQUEST_EVENT_HASH = core.new_event("main", "exit")
+    core.register_to_event("main", "exit", request_to_exit) 
+    t = 0
     while True:
-        t+=1
-        if t>1000:
+        t += 1
+        if t > 1000:
             core.fire_event(APPEXIT_REQUEST_EVENT_HASH)
             break
             

@@ -1,9 +1,9 @@
 '''
-Created on Oct 19, 2010
+Created on Dec 12, 2010
 
 @author: EB020653
 '''
-from sqlobject import SQLObject, StringCol, ForeignKey, BoolCol
+from sqlobject import SQLObject, StringCol, BoolCol, ForeignKey, connectionForURI
 
 #Por lo pronto solo guardariamos estos datos en la app.
 #Sugerencias de mas data bienvenidas!.
@@ -14,16 +14,10 @@ from sqlobject import SQLObject, StringCol, ForeignKey, BoolCol
 # o tambien puede ser combinaciones de colores para el editor,
 # etc.
 
-class Paths(SQLObject):
+class Path(SQLObject):
+    name = StringCol()
     path = StringCol()
+
+class PluginList(SQLObject):
     name = StringCol()
-    description = StringCol()
-
-
-class Plugins(SQLObject):
-    name = StringCol()
-    install_path = ForeignKey("Paths")
-    active = BoolCol(default=False)
-
-
-        
+    isactive = BoolCol(default=False)

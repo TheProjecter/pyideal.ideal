@@ -26,9 +26,9 @@ class Ev3ntManager(object):
         self.__events_auth = dict()
     
     def new_event(self, event_name, event_permission_cb=None):
-        if event_name=="":
+        if event_name == "":
             raise ValueError("""You need to specify a name for the event!""")
-        event_hash=md5(event_name).hexdigest()
+        event_hash = md5(event_name).hexdigest()
         self.__events_id.update({event_name : event_hash})
         self.__events_funcs.update({self.__events_id[event_name] : Ev3nt()})
         if event_permission_cb is not None:
@@ -36,24 +36,24 @@ class Ev3ntManager(object):
         return event_hash
     
     def register_to_event(self, event_name, event_handler):
-        if event_name=="":
+        if event_name == "":
             raise ValueError("""You need to specify a name for the event!""")
         self.__events_funcs[self.__events_id[event_name]] += event_handler
     
     def unregister_to_event(self, event_name, event_handler):
-        if event_name=="":
+        if event_name == "":
             raise ValueError("""You need to specify a name for the event!""")
         self.__events_funcs[self.__events_id[event_name]] -= event_handler
     
     def fire_event(self, event_hash, *args, **kwargs):
-        if event_hash=="":
+        if event_hash == "":
             raise ValueError("""You need to specify a name for the event!""")
         self.__events_funcs[event_hash](args, kwargs)
 
     def get_event_hash (self, event_name, event_token):
-        if event_name=="":
+        if event_name == "":
             raise ValueError("""You need to specify a name for the event!""")
-        if event_token=="":
+        if event_token == "":
             raise ValueError("""You need to give a token for the authorization!""")
         try:
             if self.__events_auth[event_name](event_token):
@@ -155,9 +155,9 @@ def test_reg(event_manager):
     def eventhandler(*args, **kwargs):
         print "event!"
     
-    eventIds=set()
+    eventIds = set()
     for i in xrange(10):
-        eventname="event_"+str(i)
+        eventname = "event_" + str(i)
         eventIds.add(event_manager.new_event(eventname))
         #event_manager.register_to_event(eventname, eventhandler)
         for k in xrange(10):
@@ -176,12 +176,12 @@ if __name__ == "__main__":
     print "Generating 10 events and register 10 events handler for each event."
     #test_reg()
     t = Timer("evtmng=test_reg(event_manager);", "from __main__ import test_reg, Ev3ntManager; event_manager=Ev3ntManager();")
-    k=1000000
-    event_reg_results=k*t.timeit(number=k)/k
+    k = 1000000
+    event_reg_results = k * t.timeit(number=k) / k
     print "Done!"
     print "Firing up all events!, console madnessssssssssss!."
     t = Timer("test_fire(evtmng)", "from __main__ import test_reg, Ev3ntManager; event_manager=Ev3ntManager(); evtmng=test_reg(event_manager);")
-    event_fire_results=k*t.timeit(number=k)/k
+    event_fire_results = k * t.timeit(number=k) / k
     print "Done!"
     print "So, lately there is the stats:"
     print "Register 10 events and 10 handlers %.2f usec/pass" % event_reg_results

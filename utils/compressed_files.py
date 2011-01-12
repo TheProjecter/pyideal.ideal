@@ -15,7 +15,7 @@ def is_zipfile(filename):
     return zipfile.is_zipfile(filename)
 
 def is_gzipfile(filename):
-    gz=gzip.GzipFile(filename)
+    gz = gzip.GzipFile(filename)
     try:
         gz.read(1)
         gz.close()
@@ -25,7 +25,7 @@ def is_gzipfile(filename):
     return True
 
 def is_bz2file(filename):
-    bz=bz2.BZ2File(filename)
+    bz = bz2.BZ2File(filename)
     try:
         bz.read(1)
         bz.close()
